@@ -1,0 +1,68 @@
+---
+title: "tubecleanR - A mini R-package for cleaning and preprocessing YouTube comment data"
+subtitle: "Full title"
+author:
+  - name: "Julian Kohne"
+  - name: "Johannes Breuer"
+image: images/tubecleanr_logo.png 
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+format:
+  html: default
+  pdf: default
+bibliography: references.bib
+biblio-style: apa
+---
+
+
+# At a glance
+  
+  - YouTube comment data can be collected via multiple ways through the YouTube Data API v3
+  
+  - The quantity, formatting, and quality of YouTube comment data can vary depending on the tools used for collection
+  
+  - The R package [tubecleanR](https://github.com/gesiscss/tubecleanR) provides a set of functions to clean and preprocess YouTube comment data collected using the [tuber](https://github.com/gojiplus/tuber) and [vosonSML](https://github.com/vosonlab/vosonSML) R-packages, bringing them into the same format.
+  
+  - The prepossessed data can be further used for quantitative and qualitative research, NLP, or visualizations
+
+### Table of Contents
+
+[Introduction](#introduction)
+
+This is a test citation [@breuer2023using] and a test citation with page number [@breuer2023using, p. 1].
+
+[Setup](#setup)
+
+[Tool application](#tool-application)
+
+[Conclusion and recommendations](#conclusion-and-recommendations)
+
+
+# Introduction
+
+# Set-up
+
+## Data/Data and Measures/... 
+
+## Getting started 
+<!-- for package installation and loading data sets; heading is not mandatory -->
+
+# Tool application
+
+<!--subheadings for tool application can be specified "freely" and depending on structure of your tool -->
+
+
+::: {.callout-note title="Custom Note Title"}
+This can be additional information you want to provide and visually
+separate from your main text.
+:::
+
+<!-- Additional information can be included as callout blocks with titles, such as
+"Be careful", "Good to know", or "Package-specific feature"-->
+
+
+# Conclusion and recommendations 
+
+
+# References
+
+
