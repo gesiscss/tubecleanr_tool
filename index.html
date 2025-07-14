@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.33">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Julian Kohne">
 <meta name="author" content="Johannes Breuer">
 
-<title>tubecleanR - A mini R-package for cleaning and preprocessing YouTube comment data</title>
+<title>tubecleanR</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -45,31 +79,30 @@ div.csl-indent {
 }</style>
 
 
-<script src="tubecleanr_tool_files/libs/clipboard/clipboard.min.js"></script>
-<script src="tubecleanr_tool_files/libs/quarto-html/quarto.js"></script>
-<script src="tubecleanr_tool_files/libs/quarto-html/popper.min.js"></script>
-<script src="tubecleanr_tool_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="tubecleanr_tool_files/libs/quarto-html/anchor.min.js"></script>
-<link href="tubecleanr_tool_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="tubecleanr_tool_files/libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="tubecleanr_tool_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="tubecleanr_tool_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="tubecleanr_tool_files/libs/bootstrap/bootstrap-0ddd601e6d80e06954f97223d8594e1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
 
-<body>
+<body class="fullcontent">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tubecleanr_tool.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">tubecleanR - A mini R-package for cleaning and preprocessing YouTube comment data</h1>
-<p class="subtitle lead">Full title</p>
+<h1 class="title">tubecleanR</h1>
+<p class="subtitle lead">Processing YouTube comment data in R</p>
 </div>
 
 
@@ -84,12 +117,6 @@ div.csl-indent {
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
-    </div>
-  </div>
   
     
   </div>
@@ -100,66 +127,228 @@ div.csl-indent {
 
 
 <section id="at-a-glance" class="level1">
-<h1>At a glance</h1>
-<ul>
-<li><p>YouTube comment data can be collected via multiple ways through the YouTube Data API v3</p></li>
-<li><p>The quantity, formatting, and quality of YouTube comment data can vary depending on the tools used for collection</p></li>
-<li><p>The R package <a href="https://github.com/gesiscss/tubecleanR">tubecleanR</a> provides a set of functions to clean and preprocess YouTube comment data collected using the <a href="https://github.com/gojiplus/tuber">tuber</a> and <a href="https://github.com/vosonlab/vosonSML">vosonSML</a> R-packages, bringing them into the same format.</p></li>
-<li><p>The prepossessed data can be further used for quantitative and qualitative research, NLP, or visualizations</p></li>
-</ul>
-<section id="table-of-contents" class="level3">
-<h3 class="anchored" data-anchor-id="table-of-contents">Table of Contents</h3>
-<p><a href="#introduction">Introduction</a></p>
-<p>This is a test citation <span class="citation" data-cites="breuer2023using">(<a href="#ref-breuer2023using" role="doc-biblioref">Breuer, Kohne, and Mohseni 2023</a>)</span> and a test citation with page number <span class="citation" data-cites="breuer2023using">(<a href="#ref-breuer2023using" role="doc-biblioref">Breuer, Kohne, and Mohseni 2023, 1</a>)</span>.</p>
-<p><a href="#setup">Setup</a></p>
-<p><a href="#tool-application">Tool application</a></p>
-<p><a href="#conclusion-and-recommendations">Conclusion and recommendations</a></p>
-</section>
+<h1><strong>At a glance</strong></h1>
+<p>This tutorial introduces the <code>R</code> package <a href="https://github.com/gesiscss/tubecleanR"><code>tubecleanR</code></a>, which provides a set of functions for cleaning and preprocessing <em>YouTube</em> comment data collected using the <a href="https://github.com/gojiplus/tuber"><code>tuber</code></a> or <a href="https://github.com/vosonlab/vosonSML"><code>vosonSML</code></a> <code>R</code> packages.</p>
 </section>
 <section id="introduction" class="level1">
-<h1>Introduction</h1>
+<h1>1. Introduction</h1>
+<p><em>YouTube</em> is the largest and most popular video platform worldwide and its use generates vast amounts of data that can be of interest to researchers in the social sciences (and other fields). There are different types of <em>YouTube</em> data and these can be used to answer a large variety of research questions <span class="citation" data-cites="BreuerEtAl2023 DeubelEtAl2024">(see <a href="#ref-BreuerEtAl2023" role="doc-biblioref">Breuer, Kohne, and Mohseni 2023</a>; <a href="#ref-DeubelEtAl2024" role="doc-biblioref">Deubel et al. 2024</a>)</span>. One type of data that is of particular interest to researchers is the comments that users leave on videos.</p>
+<p><em>YouTube</em> comment data (as well as other types of data, such as video or channel statistics) can be collected in different ways <span class="citation" data-cites="DeubelEtAl2024">(<a href="#ref-DeubelEtAl2024" role="doc-biblioref">Deubel et al. 2024</a>)</span>. An accessible, versatile, and widely used option is the <a href="https://developers.google.com/youtube/v3?hl=en">YouTube Data API</a>. The guide by <span class="citation" data-cites="KohneEtAl2024">Kohne et al. (<a href="#ref-KohneEtAl2024" role="doc-biblioref">2024</a>)</span> provides an introduction on “How to Collect Data with the YouTube Data API”.</p>
+<p>As is usually the case for text data (especially if they are collected from online platforms), <em>YouTube</em> comments are typically not directly “ready for analysis”, particularly if quantitative text analysis methods are to be applied. Instead, they need to be cleaned and preprocessed first. The <em>KODAQS Toolbox</em> entry <a href="https://kodaqs-toolbox.gesis.org/github.com/YannikPeters/DQ_Tool_TextPreprocessing/index/#literature">TextPrep</a> by Yannik Peters and Kunjan Shah provides a general introduction to text preprocessing in <code>R</code>. The <code>tubecleanR</code> package provides functionalities specifically for <em>YouTube</em> comment data.</p>
+<p>There are various tools (<code>R</code> packages. <code>Python</code> libraries, or standalone software) that can be used for collecting <em>YouTube</em> comments <span class="citation" data-cites="DeubelEtAl2023 DeubelEtAl2024">(for an overview, see <a href="#ref-DeubelEtAl2023" role="doc-biblioref">Deubel, Breuer, and Weller 2023</a>; <a href="#ref-DeubelEtAl2024" role="doc-biblioref">Deubel et al. 2024</a>)</span>. Two popular options for collecting <em>YouTube</em> data from the “<code>R</code> world” are the packages <a href="https://github.com/gojiplus/tuber"><code>tuber</code></a> and <a href="https://github.com/vosonlab/vosonSML"><code>vosonSML</code></a>. These are the ones that the <code>tubecleanR</code> package focuses on.</p>
 </section>
-<section id="set-up" class="level1">
-<h1>Set-up</h1>
-<section id="datadata-and-measures" class="level2">
-<h2 class="anchored" data-anchor-id="datadata-and-measures">Data/Data and Measures/…</h2>
-<!--this heading is not mandatory and can be adjusted to your specific tool structure-->
-</section>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
-<!-- for package installation and loading data sets; heading is not mandatory -->
-</section>
-</section>
-<section id="tool-application" class="level1">
-<h1>Tool application</h1>
-<!--subheadings for tool application can be specified "freely" and depending on structure of your tool -->
-<div class="callout callout-style-default callout-note callout-titled" title="Custom Note Title">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="setup" class="level1">
+<h1>2. Setup</h1>
+<p>Before you can use the package, you need to install it. The <code>tubecleanR</code> package is only available from <em>GitHub</em>, so you need to use the <code>remotes</code> package to install it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gesiscss/tubecleanR"</span>, <span class="at">upgrade =</span> <span class="st">"never"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout-title-container flex-fill">
-Custom Note Title
+<p>After installing the package, you need to load it. For exploring the data, we will use the <a href="https://dplyr.tidyverse.org/"><code>dplyr</code> package</a> from the <a href="https://www.tidyverse.org/"><code>tidyverse</code> collection of packages</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tubecleanR)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This can be additional information you want to provide and visually separate from your main text.</p>
-</div>
-</div>
-<!-- Additional information can be included as callout blocks with titles, such as
-"Be careful", "Good to know", or "Package-specific feature"-->
+<p>If you want to use the <code>tubecleanR</code> package with your data, you first need to collect it using either <a href="https://github.com/gojiplus/tuber"><code>tuber</code></a> or <a href="https://github.com/vosonlab/vosonSML"><code>vosonSML</code></a>. Please note that both of these require API keys and <code>tuber</code> also requires an OAuth token. How to obtain these is explained in the guide by <span class="citation" data-cites="KohneEtAl2024">Kohne et al. (<a href="#ref-KohneEtAl2024" role="doc-biblioref">2024</a>)</span> as well as the <a href="https://github.com/jobreu/youtube-workshop-gesis-2023">materials for the 2023 GESIS Training workshop “Automatic Sampling and Analysis of YouTube Comments”</a>.</p>
 </section>
-<section id="conclusion-and-recommendations" class="level1">
-<h1>Conclusion and recommendations</h1>
+<section id="application" class="level1">
+<h1>3. Application</h1>
+<p>Since the Terms of Service of the <em>YouTube Data API</em> do not allow to share the collected data, we cannot work with comment data from actual videos in this tutorial. Instead, we have simulated data using <a href="https://gemini.google.com/app"><em>Google Gemini</em></a>. The simulated data is contained in the <code>data</code> folder in the <a href="https://github.com/gesiscss/tubecleanr_tool"><em>GitHub</em> repository for this tutorial</a>. This data follows the structure of the data returned by the <code>Collect()</code> function from the <code>vosonSML</code> package. Data collected with <code>vosonSML</code> includes further columns/variables. However, in the simulated data, we have only included the columns that are relevant for the <code>tubecleanR</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>simulated_yt <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(<span class="st">"data/simulated_yt.csv"</span>, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">"UTF-8"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s have a look at the structure of the simulated data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(simulated_yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "VideoID"           "AuthorDisplayName" "Comment"          
+[4] "LikeCount"         "PublishedAt"       "UpdatedAt"        
+[7] "ParentID"          "CommentID"        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(simulated_yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 245
+Columns: 8
+$ VideoID           &lt;chr&gt; "dQw4w9WgXcQ", "xyz789AbCde", "fGHjKlMnOpq", "PqRsTu…
+$ AuthorDisplayName &lt;chr&gt; "TechGuru88", "ArtLover22", "GamerProX", "MusicFanat…
+$ Comment           &lt;chr&gt; "This video changed my perspective! Highly recommend…
+$ LikeCount         &lt;dbl&gt; 154, 87, 301, 210, 95, 180, 120, 65, 250, 110, 190, …
+$ PublishedAt       &lt;dttm&gt; 2024-06-20 14:35:01, 2024-06-19 18:02:10, 2024-06-1…
+$ UpdatedAt         &lt;dttm&gt; 2024-06-20 14:35:01, 2024-06-19 18:02:10, 2024-06-1…
+$ ParentID          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ CommentID         &lt;chr&gt; "Ugw3KPnh-5QJnBpeymd4AaABAg", "Ugy9J-5h-1RKnBpeymd4A…</code></pre>
+</div>
+</div>
+<p>If we look through the strings contained in the <code>Comment</code> column, we will see that many of them contain emoji and some also contain URLs, user mentions, or video time stamps.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>simulated_yt <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">20</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Comment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "The sounds of nature are so soothing. 🌳"                                                                                  
+ [2] "What a beauty! 🏎️💨"                                                                                                        
+ [3] "Skill level: GOD! 🤯"                                                                                                      
+ [4] "This is a work of art! 🧑‍🍳"                                                                                               
+ [5] "So clever and practical! 👍"                                                                                               
+ [6] "Pure bliss. 🌿"                                                                                                            
+ [7] "This cheered me up! 🥰 What a delightful video!"                                                                           
+ [8] "Perfect video for a rainy day! 💖"                                                                                         
+ [9] "Best video ever! So funny. 😂"                                                                                             
+[10] "An essential read. Highly recommended."                                                                                    
+[11] "Dream destination! ✈️ I need to go here. :-)"                                                                               
+[12] "Amazing lighting! Any tips on achieving this? 📸"                                                                          
+[13] "Learned so much from this! 📜 Highly recommend checking out this article too: https://www.history.example.com/ancient-rome"
+[14] "Such a talented artist! 👏"                                                                                                
+[15] "These animals are so precious! 🐾❤️"                                                                                        
+[16] "Unbelievable skill! A true masterclass. 🏆"                                                                                
+[17] "Always amazing content from you! Keep it up! 🤩"                                                                           
+[18] "Can't stop smiling! 😄"                                                                                                    
+[19] "My fur baby loves this video too! 🐶"                                                                                      
+[20] "Definitely trying this next weekend! 🤩"                                                                                   </code></pre>
+</div>
+</div>
+<p>Please note that – just like the comments – the video IDs, URLs and user names in the data are fake (or simulated if you prefer a nicer word).</p>
+<p>Now, let’s use the <code>tubecleanR</code> package to clean and preprocess the data. The main function of the package is <code>parse_yt_comments()</code> which takes a dataframe containing <em>YouTube</em> comments collected with <code>tuber</code> or <code>vosonSML</code> as input and outputs a processed dataframe in which URLs, video timestamps user mentions, emoticons, and emoji have been extracted from the comments into separate columns. In addition to that, the function creates a further column containing textual descriptions of the emoji, and another one containing a “clean” version of the comment in which the elements listed before as well as numbers and punctuation have been removed.</p>
+<p>Of course, you can or, depending on your research question and analysis methods might have to, run further preprocessing steps on the data, such as lowercasing, removing stop words, stemming or lemmatization, or tokenization. The <code>tubecleanR</code> package does not provide functions for these steps, but you can, e.g., use the <a href="https://www.tidytextmining.com/"><code>tidytext</code></a> package for that (the <em>KODAQS Toolbox</em> entry <a href="https://kodaqs-toolbox.gesis.org/github.com/YannikPeters/DQ_Tool_TextPreprocessing/index/#literature">TextPrep</a> also provides some further guidance on these steps).</p>
+<p>Please note: As the preprocessing involves multiple steps, running the <code>parse_yt_comments()</code> function can take a while, especially if you have a large dataset. The simulated data we are using here is small, so it should not take long to process.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>processed_yt <span class="ot">&lt;-</span> <span class="fu">parse_yt_comments</span>(simulated_yt,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">package =</span> <span class="st">"vosonSML"</span>) <span class="co"># here, we specify that the data was collected with the vosonSML package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s have a look at the structure of the processed data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(processed_yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "VideoID"          "Author"           "OriginalText"     "CleanedText"     
+ [5] "Emoji"            "EmojiDescription" "Emoticons"        "LikeCount"       
+ [9] "URL"              "Timestamps"       "UserMentions"     "Published"       
+[13] "Updated"          "ParentId"         "CommentID"       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(processed_yt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 245
+Columns: 15
+$ VideoID          &lt;chr&gt; "dQw4w9WgXcQ", "xyz789AbCde", "fGHjKlMnOpq", "PqRsTuV…
+$ Author           &lt;chr&gt; "TechGuru88", "ArtLover22", "GamerProX", "MusicFanati…
+$ OriginalText     &lt;chr&gt; "This video changed my perspective! Highly recommend.…
+$ CleanedText      &lt;chr&gt; "This video changed my perspective Highly recommend",…
+$ Emoji            &lt;I&lt;list&gt;&gt;     👍,     ✨,     😂,     🎶,     😊,      ✈️,  …
+$ EmojiDescription &lt;I&lt;list&gt;&gt;    Thumbs_Up,     Sparkles, Face_wit...., Musical…
+$ Emoticons        &lt;I&lt;list&gt;&gt;  NA,  NA,  NA,  NA,  NA, :-), :-D,  NA,  NA,  NA,…
+$ LikeCount        &lt;dbl&gt; 154, 87, 301, 210, 95, 180, 120, 65, 250, 110, 190, 7…
+$ URL              &lt;I&lt;list&gt;&gt; https://....,           NA,           NA, https:/…
+$ Timestamps       &lt;I&lt;chr&gt;&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ UserMentions     &lt;I&lt;chr&gt;&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ Published        &lt;dttm&gt; 2024-06-20 16:35:01, 2024-06-19 20:02:10, 2024-06-18…
+$ Updated          &lt;dttm&gt; 2024-06-20 16:35:01, 2024-06-19 20:02:10, 2024-06-18…
+$ ParentId         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ CommentID        &lt;chr&gt; "Ugw3KPnh-5QJnBpeymd4AaABAg", "Ugy9J-5h-1RKnBpeymd4Aa…</code></pre>
+</div>
+</div>
+<p>We can compare the <code>OriginalText</code> with the newly created <code>CleanedText</code> column to see how the comments have been cleaned.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>processed_yt <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OriginalText, CleanedText) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                                                              OriginalText
+1                                                                      The composition is off at 00:45. Could be improved.
+2                                                                                         So many practical ideas. Thanks!
+3                                                                                                    Too cute to handle! 💖
+4                                                                            The composition is absolutely breathtaking. 📸
+5                                                                                             Best video ever! So funny. 😂
+6                                                                                        These animals are so precious! 🐾❤️
+7                                                                                              Great form and technique! 💪
+8                                                                                    Such a powerful cinematic experience.
+9                                                                                               Absolutely breathtaking! 🗺️
+10                                                          Not enough action for me. Needs more intense moments at 01:00.
+11                                                                        Always learning something new from your channel!
+12                                                                                   Feeling pumped after watching this! 💪
+13                                                                                             So inspiring, thank you! ✨
+14                                                                                     Such vibrant colors! Well done. :-)
+15                                                                                               Such a talented artist! 👏
+16 Mind-blown! 🤯 The universe is incredible. Check out this research paper: https://www.science.example.com/universe-facts
+17                                                                                             Beautiful depth of field. 📸
+18                                                                                It has its moments, but also some flaws.
+19                                                                                             Can't get enough of this! 😍
+20                                                                           Watched this on 1.5x speed. Still a bit slow.
+                                                           CleanedText
+1                          The composition is off at Could be improved
+2                                       So many practical ideas Thanks
+3                                                   Too cute to handle
+4                           The composition is absolutely breathtaking
+5                                             Best video ever So funny
+6                                        These animals are so precious
+7                                             Great form and technique
+8                                 Such a powerful cinematic experience
+9                                              Absolutely breathtaking
+10              Not enough action for me Needs more intense moments at
+11                     Always learning something new from your channel
+12                                  Feeling pumped after watching this
+13                                              So inspiring thank you
+14                                       Such vibrant colors Well done
+15                                              Such a talented artist
+16 Mind blown The universe is incredible Check out this research paper
+17                                            Beautiful depth of field
+18                              It has its moments but also some flaws
+19                                            Can't get enough of this
+20                            Watched this on x speed Still a bit slow</code></pre>
+</div>
+</div>
+<p>In addition to extracting them, the <code>parse_yt_comments()</code> function also creates a column containing textual descriptions of the emoji included in the comments using a dictionary approach.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>processed_yt <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Emoji)) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Emoji, EmojiDescription) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Emoji EmojiDescription
+1   ✈️, 🌍     Airplane....
+2      😄     Grinning....
+3      🚀           Rocket
+4      🥰     Smiling_....
+5      😋     Face_Sav....
+6      🎤       Microphone
+7     ✨         Sparkles
+8      🔥             Fire
+9      👌          OK_Hand
+10     👍        Thumbs_Up
+11    🧘‍♀️     Woman_in....
+12     🙏     Folded_Hands
+13  🐾, ❤️     Paw_Prin....
+14    ✨         Sparkles
+15     👎      Thumbs_Down
+16     🔥             Fire
+17     👏     Clapping....
+18     🤤     Drooling....
+19     🌈          Rainbow
+20     🎨     Artist_P....</code></pre>
+</div>
+</div>
 </section>
-<section id="references" class="level1 unnumbered">
+<section id="discussion" class="level1">
+<h1>4. Discussion</h1>
+<p><em>YouTube</em> user comments can be a very interesting data source for social science research <span class="citation" data-cites="BreuerEtAl2023 DeubelEtAl2024">(<a href="#ref-BreuerEtAl2023" role="doc-biblioref">Breuer, Kohne, and Mohseni 2023</a>; <a href="#ref-DeubelEtAl2024" role="doc-biblioref">Deubel et al. 2024</a>)</span>. There are various options for collecting such data <span class="citation" data-cites="DeubelEtAl2023 DeubelEtAl2024">(<a href="#ref-DeubelEtAl2023" role="doc-biblioref">Deubel, Breuer, and Weller 2023</a>; <a href="#ref-DeubelEtAl2024" role="doc-biblioref">Deubel et al. 2024</a>)</span>. Many of the available tools make use of the <em>YouTube Data API</em> <span class="citation" data-cites="KohneEtAl2024">(see <a href="#ref-KohneEtAl2024" role="doc-biblioref">Kohne et al. 2024</a> for an introduction)</span>. This also applies to the <code>tuber</code> and <code>vosonSML</code> packages for <code>R</code>.</p>
+<p>The <code>tubecleanR</code> package provides a set of functions for cleaning and preprocessing <em>YouTube</em> comment data collected with these two packages. In addition to extracting URLs, video timestamps, and user mentions, it also extracts emoticons and emoji from the comments and creates textual descriptions of the emoji. Emoji have often been ignored in analysis of social media data, but they can be an important part of the communication and meaning in online comments <span class="citation" data-cites="BreuerEtAl2023">(<a href="#ref-BreuerEtAl2023" role="doc-biblioref">Breuer, Kohne, and Mohseni 2023</a>)</span>. The <code>tubecleanR</code> package provides a simple way to extract and preprocess them.</p>
+<p>The functionalities provided by the<code>tubecleanr</code> package facilitate the cleaning and preprocessing of <em>YouTube</em> comment data and can, thus, contribute to increasing the quality of such data. The prepossessed data can be used by researchers for quantitative and/or qualitative analysis, e.g., using text mining or natural language processing (NLP) methods.</p>
+<p><em>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).</em></p>
+</section>
+<section id="literature" class="level1 unnumbered">
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-breuer2023using" class="csl-entry" role="listitem">
-Breuer, Johannes, Julian Kohne, and M Rohangis Mohseni. 2023. <span>“Using YouTube Data for Social Science Research.”</span> In <em>Research Handbook on Digital Sociology</em>, 258–77. Edward Elgar Publishing.
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">5. Literature</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-BreuerEtAl2023" class="csl-entry" role="listitem">
+Breuer, Johannes, Julian Kohne, and M. Rohangis Mohseni. 2023. <span>“Using <span>YouTube</span> Data for Social Science Research.”</span> In <em>Research <span>Handbook</span> on <span>Digital</span> <span>Sociology</span></em>, edited by Jan Skopek, 258–77. Edward Elgar Publishing. <a href="https://doi.org/10.4337/9781789906769.00022">https://doi.org/10.4337/9781789906769.00022</a>.
+</div>
+<div id="ref-DeubelEtAl2024" class="csl-entry" role="listitem">
+Deubel, Annika, Johannes Breuer, Julian Kohne, and M. Rohangis Mohseni. 2024. <span>“Overview of <span>Working</span> with <span>Data</span> from <span>YouTube</span> (<span>GESIS</span> <span>Guides</span> to <span>Digital</span> <span>Behavioral</span> <span>Data</span>, 12).”</span> GESIS - Leibniz-Institute for the Social Sciences. <a href="https://doi.org/10.60762/GGDBD24012.1.0">https://doi.org/10.60762/GGDBD24012.1.0</a>.
+</div>
+<div id="ref-DeubelEtAl2023" class="csl-entry" role="listitem">
+Deubel, Annika, Johannes Breuer, and Katrin Weller. 2023. <span>“Collecting <span>Social</span> <span>Media</span> <span>Data</span>: <span>Tools</span> for <span>Obtaining</span> <span>Data</span> from <span>Social</span> <span>Media</span> <span>Platforms</span>.”</span> 1. Center for Advanced Internet Studies. <a href="https://www.cais-research.de/wp-content/uploads/Collecting-Social-Media-Data.pdf">https://www.cais-research.de/wp-content/uploads/Collecting-Social-Media-Data.pdf</a>.
+</div>
+<div id="ref-KohneEtAl2024" class="csl-entry" role="listitem">
+Kohne, Julian, Johannes Breuer, Annika Deubel, and M. Rohangis Mohseni. 2024. <span>“How to <span>Collect</span> <span>Data</span> with the <span>YouTube</span> <span>Data</span> <span>API</span> (<span>GESIS</span> <span>Guides</span> to <span>Digital</span> <span>Behavioral</span> <span>Data</span>, 13).”</span> GESIS - Leibniz-Institute for the Social Sciences. <a href="https://doi.org/10.60762/GGDBD24013.1.0">https://doi.org/10.60762/GGDBD24013.1.0</a>.
 </div>
 </div></section></div></main>
 <!-- /main column -->

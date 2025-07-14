@@ -1,28 +1,23 @@
-# This CITATION.cff file was generated with cffinit.
-# Visit https://bit.ly/cffinit to generate yours today!
-
 cff-version: 1.2.0
-title: tubecleanR
-message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
-type: software
+message: "If you use this resource, please cite it as below."
+title: "Processing YouTube comment data with tubecleanR"
 authors:
-  - given-names: Julian
-    family-names: Kohne
-    affiliation: GESIS - Leibniz Institute for the Social Sciences
-    orcid: 'https://orcid.org/0000-0002-6710-7545'
-  - given-names: Johannes
-    family-names: Breuer
-    email: johannes.breuer@gesis.org
-    affiliation: GESIS - Leibniz Institute for the Social Sciences
-    orcid: 'https://orcid.org/0000-0001-5906-7873'
-repository-code: 'https://github.com/gesiscss/tubecleanR'
-url: 'https://gesiscss.github.io/tubecleanR/'
+  - family-names: "Breuer"
+    given-names: "Johannes"
+    affiliation: "GESIS - Leibniz Institute for the Social Sciences"
+    orcid: "https://orcid.org/0000-0001-5906-7873"
+  - family-names: "Kohne"
+    given-names: "Julian"
+    affiliation: "GESIS - Leibniz Institute for the Social Sciences"
+    orcid: "https://orcid.org/0000-0002-6710-7545"
+date-released: "2025-07-21"
+version: "1.0.0"
+url: "https://kodaqs-toolbox.gesis.org/github.com/gesiscss/tubecleanr_tool/index"
+repository-code: "https://github.com/gesiscss/tubecleanr_tool"
 keywords:
-  - R
-  - YouTube
-  - Comments
-  - Preprocessing
-  - Data Quality
-license: CC-BY-4.0
+  - "R"
+  - "YouTube"
+  - "Comments"
+  - "Preprocessing"
+  - "Data Quality"
+license: "CC-BY-4.0""

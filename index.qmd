@@ -1,68 +1,116 @@
 ---
-title: "tubecleanR - A mini R-package for cleaning and preprocessing YouTube comment data"
-subtitle: "Full title"
+title: "tubecleanR"
+subtitle: "Processing YouTube comment data in R"
 author:
   - name: "Julian Kohne"
   - name: "Johannes Breuer"
-image: images/tubecleanr_logo.png 
-date: "`r format(Sys.Date(), '%B %d, %Y')`"
-format:
-  html: default
-  pdf: default
+image: image/icon_tubecleanR.png
+image-alt: logo
+editor: visual
+format: html
 bibliography: references.bib
-biblio-style: apa
 ---
 
 
-# At a glance
-  
-  - YouTube comment data can be collected via multiple ways through the YouTube Data API v3
-  
-  - The quantity, formatting, and quality of YouTube comment data can vary depending on the tools used for collection
-  
-  - The R package [tubecleanR](https://github.com/gesiscss/tubecleanR) provides a set of functions to clean and preprocess YouTube comment data collected using the [tuber](https://github.com/gojiplus/tuber) and [vosonSML](https://github.com/vosonlab/vosonSML) R-packages, bringing them into the same format.
-  
-  - The prepossessed data can be further used for quantitative and qualitative research, NLP, or visualizations
+# **At a glance**
 
-### Table of Contents
+This tutorial introduces the `R` package [`tubecleanR`](https://github.com/gesiscss/tubecleanR), which provides a set of functions for cleaning and preprocessing *YouTube* comment data collected using the [`tuber`](https://github.com/gojiplus/tuber) or [`vosonSML`](https://github.com/vosonlab/vosonSML) `R` packages.
 
-[Introduction](#introduction)
+# 1. Introduction
 
-This is a test citation [@breuer2023using] and a test citation with page number [@breuer2023using, p. 1].
+*YouTube* is the largest and most popular video platform worldwide and its use generates vast amounts of data that can be of interest to researchers in the social sciences (and other fields). There are different types of *YouTube* data and these can be used to answer a large variety of research questions [see @BreuerEtAl2023; @DeubelEtAl2024]. One type of data that is of particular interest to researchers is the comments that users leave on videos. 
 
-[Setup](#setup)
+*YouTube* comment data (as well as other types of data, such as video or channel statistics) can be collected in different ways [@DeubelEtAl2024]. An accessible, versatile, and widely used option is the [YouTube Data API](https://developers.google.com/youtube/v3?hl=en). The guide by @KohneEtAl2024 provides an introduction on "How to Collect Data with the YouTube Data API".
 
-[Tool application](#tool-application)
+As is usually the case for text data (especially if they are collected from online platforms), *YouTube* comments are typically not directly "ready for analysis", particularly if quantitative text analysis methods are to be applied. Instead, they need to be cleaned and preprocessed first. The *KODAQS Toolbox* entry [TextPrep](https://kodaqs-toolbox.gesis.org/github.com/YannikPeters/DQ_Tool_TextPreprocessing/index/#literature) by Yannik Peters and Kunjan Shah provides a general introduction to text preprocessing in `R`. The `tubecleanR` package provides functionalities specifically for *YouTube* comment data.
 
-[Conclusion and recommendations](#conclusion-and-recommendations)
+There are various tools (`R` packages. `Python` libraries, or standalone software) that can be used for collecting *YouTube* comments [for an overview, see @DeubelEtAl2023; @DeubelEtAl2024]. Two popular options for collecting *YouTube* data from the "`R` world" are the packages [`tuber`](https://github.com/gojiplus/tuber) and [`vosonSML`](https://github.com/vosonlab/vosonSML). These are the ones that the `tubecleanR` package focuses on.
 
+# 2. Setup
 
-# Introduction
+Before you can use the package, you need to install it. The `tubecleanR` package is only available from *GitHub*, so you need to use the `remotes` package to install it.
 
-# Set-up
+```{r install, message = FALSE, warning = FALSE, eval = FALSE}
+remotes::install_github("gesiscss/tubecleanR", upgrade = "never")
+```
 
-## Data/Data and Measures/... 
+After installing the package, you need to load it. For exploring the data, we will use the [`dplyr` package](https://dplyr.tidyverse.org/) from the [`tidyverse` collection of packages](https://www.tidyverse.org/).
 
-## Getting started 
-<!-- for package installation and loading data sets; heading is not mandatory -->
+```{r load, message = FALSE, warning = FALSE}
+library(tubecleanR)
+library(tidyverse)
+```
 
-# Tool application
+If you want to use the `tubecleanR` package with your data, you first need to collect it using either [`tuber`](https://github.com/gojiplus/tuber) or [`vosonSML`](https://github.com/vosonlab/vosonSML). Please note that both of these require API keys and `tuber` also requires an OAuth token. How to obtain these is explained in the guide by @KohneEtAl2024 as well as the [materials for the 2023 GESIS Training workshop "Automatic Sampling and Analysis of YouTube Comments"](https://github.com/jobreu/youtube-workshop-gesis-2023).
 
-<!--subheadings for tool application can be specified "freely" and depending on structure of your tool -->
+# 3. Application
 
+Since the Terms of Service of the *YouTube Data API* do not allow to share the collected data, we cannot work with comment data from actual videos in this tutorial. Instead, we have simulated data using [*Google Gemini*](https://gemini.google.com/app). The simulated data is contained in the `data` folder in the [*GitHub* repository for this tutorial](https://github.com/gesiscss/tubecleanr_tool). This data follows the structure of the data returned by the `Collect()` function from the `vosonSML` package. Data collected with `vosonSML` includes further columns/variables. However, in the simulated data, we have only included the columns that are relevant for the `tubecleanR` package.
 
-::: {.callout-note title="Custom Note Title"}
-This can be additional information you want to provide and visually
-separate from your main text.
-:::
+```{r data, message = FALSE, warning = FALSE}
+simulated_yt <- read_csv2("data/simulated_yt.csv", locale = locale(encoding = "UTF-8"))
+```
 
-<!-- Additional information can be included as callout blocks with titles, such as
-"Be careful", "Good to know", or "Package-specific feature"-->
+Let's have a look at the structure of the simulated data.
 
+```{r check1, message = FALSE, warning = FALSE}
+names(simulated_yt)
+glimpse(simulated_yt)
+```
 
-# Conclusion and recommendations 
+If we look through the strings contained in the `Comment` column, we will see that many of them contain emoji and some also contain URLs, user mentions, or video time stamps.
 
+```{r check2, message = FALSE, warning = FALSE}
+simulated_yt %>%
+  sample_n(20) %>% 
+  pull(Comment)
+```
 
-# References
+Please note that -- just like the comments -- the video IDs, URLs and user names in the data are fake (or simulated if you prefer a nicer word).
 
+Now, let's use the `tubecleanR` package to clean and preprocess the data. The main function of the package is `parse_yt_comments()` which takes a dataframe containing *YouTube* comments collected with `tuber` or `vosonSML` as input and outputs a processed dataframe in which URLs, video timestamps user mentions, emoticons, and emoji have been extracted from the comments into separate columns. In addition to that, the function creates a further column containing textual descriptions of the emoji, and another one containing a "clean" version of the comment in which the elements listed before as well as numbers and punctuation have been removed. 
 
+Of course, you can or, depending on your research question and analysis methods might have to, run further preprocessing steps on the data, such as lowercasing, removing stop words, stemming or lemmatization, or tokenization. The `tubecleanR` package does not provide functions for these steps, but you can, e.g., use the [`tidytext`](https://www.tidytextmining.com/) package for that (the *KODAQS Toolbox* entry [TextPrep](https://kodaqs-toolbox.gesis.org/github.com/YannikPeters/DQ_Tool_TextPreprocessing/index/#literature) also provides some further guidance on these steps).
+
+Please note: As the preprocessing involves multiple steps, running the `parse_yt_comments()` function can take a while, especially if you have a large dataset. The simulated data we are using here is small, so it should not take long to process.
+
+```{r parse, message = FALSE, warning = FALSE}
+processed_yt <- parse_yt_comments(simulated_yt,
+                                  package = "vosonSML") # here, we specify that the data was collected with the vosonSML package
+```
+
+Let's have a look at the structure of the processed data.
+
+```{r check3, message = FALSE, warning = FALSE}
+names(processed_yt)
+glimpse(processed_yt)
+```
+
+We can compare the `OriginalText` with the newly created `CleanedText` column to see how the comments have been cleaned. 
+
+```{r compare, message = FALSE, warning = FALSE}
+processed_yt %>%
+  select(OriginalText, CleanedText) %>%
+  sample_n(20)
+```
+
+In addition to extracting them, the `parse_yt_comments()` function also creates a column containing textual descriptions of the emoji included in the comments using a dictionary approach.
+
+```{r emoji, message = FALSE, warning = FALSE}
+processed_yt %>%
+  filter(!is.na(Emoji)) %>% 
+  select(Emoji, EmojiDescription) %>%
+  sample_n(20)
+```
+
+# 4. Discussion
+
+*YouTube* user comments can be a very interesting data source for social science research [@BreuerEtAl2023; @DeubelEtAl2024]. There are various options for collecting such data [@DeubelEtAl2023; @DeubelEtAl2024]. Many of the available tools make use of the *YouTube Data API* [see @KohneEtAl2024 for an introduction]. This also applies to the `tuber` and `vosonSML` packages for `R`.
+
+The `tubecleanR` package provides a set of functions for cleaning and preprocessing *YouTube* comment data collected with these two packages. In addition to extracting URLs, video timestamps, and user mentions, it also extracts emoticons and emoji from the comments and creates textual descriptions of the emoji. Emoji have often been ignored in analysis of social media data, but they can be an important part of the communication and meaning in online comments [@BreuerEtAl2023]. The `tubecleanR` package provides a simple way to extract and preprocess them.
+
+The functionalities provided by the`tubecleanr` package facilitate the cleaning and preprocessing of *YouTube* comment data and can, thus, contribute to increasing the quality of such data. The prepossessed data can be used by researchers for quantitative and/or qualitative analysis, e.g., using text mining or natural language processing (NLP) methods.
+
+*This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).*
+
+# 5. Literature
