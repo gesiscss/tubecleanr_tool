@@ -1,3 +1,7 @@
 install.packages("tidyverse")
 install.packages("remotes")
+intall.packages("DT")
+install.packages("skimr")
+install.packages("wordcloud2")
+install.packages("visNetwork")
 remotes::install_github("gesiscss/tubecleanR", upgrade = "never")
