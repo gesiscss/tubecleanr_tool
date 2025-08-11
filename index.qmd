@@ -16,6 +16,7 @@ format:
         </style>
     self-contained: true
 bibliography: references.bib
+prefer-html: true
 ---
 
 # **At a glance**
