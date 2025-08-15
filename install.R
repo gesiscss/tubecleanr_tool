@@ -1,6 +1,6 @@
 install.packages("tidyverse")
 install.packages("remotes")
-intall.packages("DT")
+install.packages("DT")
 install.packages("skimr")
 install.packages("wordcloud2")
 install.packages("visNetwork")

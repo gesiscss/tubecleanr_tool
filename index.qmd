@@ -14,8 +14,9 @@ format:
         <style>
           p { text-align: justify; }
         </style>
-    self-contained: true
+    embed-resources: true
 bibliography: references.bib
+prefer-html: true
 ---
 
 # **At a glance**
