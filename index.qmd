@@ -2,8 +2,8 @@
 title: "tubecleanR"
 subtitle: "Processing YouTube comment data in R"
 author:
-  - name: "Julian Kohne"
-  - name: "Johannes Breuer"
+    - name: "Johannes Breuer"
+    - name: "Julian Kohne"
 image: image/icon_tubecleanR.png
 image-alt: logo
 editor: visual
@@ -77,8 +77,8 @@ Let's have a look at the structure of the simulated data.
 skim(simulated_yt)[,1:4] %>%
   datatable(options = list(pageLength = 25))
 ```
-<br>
-If we look through the strings contained in the `Comment` column, we will see that many of them contain emoji and some also contain URLs, user mentions, or video time stamps.
+
+<br> If we look through the strings contained in the `Comment` column, we will see that many of them contain emoji and some also contain URLs, user mentions, or video time stamps.
 
 ```{r check2, message = FALSE, warning = FALSE}
 simulated_yt %>%
@@ -88,9 +88,10 @@ simulated_yt %>%
   datatable() # just optics
 
 ```
+
 <br><br>
 
-::: {.callout-note}
+::: callout-note
 Please note that -- just like the comments -- the video IDs, URLs and user names in the data are simulated.
 :::
 
@@ -98,7 +99,7 @@ Now, let's use the `tubecleanR` package to clean and preprocess the data. The ma
 
 Of course, you can or - depending on your research question and analysis methods - might have to, run further preprocessing steps on the data, such as lowercasing, removing stop words, stemming or lemmatization, or tokenization. The `tubecleanR` package does not provide functions for these steps, but you can, e.g., use the [`tidytext`](https://www.tidytextmining.com/) package for that (the *KODAQS Toolbox* entry [TextPrep](https://kodaqs-toolbox.gesis.org/github.com/YannikPeters/DQ_Tool_TextPreprocessing/index/#literature) also provides some further guidance on these steps).
 
-::: {.callout-note}
+::: callout-note
 Please note: As the preprocessing involves multiple steps, running the `parse_yt_comments()` function can take a while, especially if you have a large dataset. The simulated data we are using here is small, so it should not take long to process.
 :::
 
@@ -114,8 +115,8 @@ Let's have a look at the structure of the processed data.
 skim(processed_yt)[,1:4] %>%
   datatable(options = list(pageLength = 25))
 ```
-<br><br>
-We can compare the `OriginalText` with the newly created `CleanedText` column to see how the comments have been cleaned.
+
+<br><br> We can compare the `OriginalText` with the newly created `CleanedText` column to see how the comments have been cleaned.
 
 ```{r compare, message = FALSE, warning = FALSE}
 processed_yt %>%
@@ -125,8 +126,8 @@ processed_yt %>%
   datatable() # just optics
 
 ```
-<br><br>
-In addition to extracting them, the `parse_yt_comments()` function also creates a column containing textual descriptions of the emoji included in the comments using a dictionary approach.
+
+<br><br> In addition to extracting them, the `parse_yt_comments()` function also creates a column containing textual descriptions of the emoji included in the comments using a dictionary approach.
 
 ```{r emoji, message = FALSE, warning = FALSE}
 processed_yt %>%
@@ -137,8 +138,8 @@ processed_yt %>%
   datatable() # just optics
 
 ```
-<br><br>
-You can find the dictionary as an attached csv file in the `tubecleanR` package. Please keep in mind that the dictionary might get outdated as new emoji are added over time. However, you can simply append the csv file in the package to add new emoji to the dictionary based detection.
+
+<br><br> You can find the dictionary as an attached csv file in the `tubecleanR` package. Please keep in mind that the dictionary might get outdated as new emoji are added over time. However, you can simply append the csv file in the package to add new emoji to the dictionary based detection.
 
 # 4. Visualizations and further Analysis
 
@@ -242,7 +243,6 @@ visNetwork(nodes, edges) |>
 ```{r render-widget, message = FALSE, warning = FALSE, echo = FALSE}
 htmltools::includeHTML("network-widget.html")
 ```
-
 
 # 5. Discussion
 
